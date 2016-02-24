@@ -1,0 +1,38 @@
+<!DOCTYPE html>
+<html lang="en" ng-app="sketch">
+<head>
+	<meta charset="UTF-8">
+	<title>素描本-画板</title>
+<link rel="stylesheet" type="text/css" href="./css/index.css">
+<script type="text/javascript" src="js/angular.js"></script>
+<script type="text/javascript" src="js/index.js"></script>
+</head>
+<body ng-controller="sketchController">
+	<div class="left">
+		<ul class="top">
+			<li ng-repeat="(key, value) in tools" ng-click="setTool(value)" ng-class="{active:value==tool,a:value=='line',b:value=='clear',c:value=='arc',d:value=='rect'}">{{key}}</li>
+		</ul>
+			
+		<hr>
+		<div ng-class="{active:csState.style=='stroke'}" ng-click="setStyle('stroke')">
+			<span>画线</span>
+			<input type="color" ng-model="csState.strokeStyle">
+		</div>
+		<div ng-class="{active:csState.style=='fill'}" ng-click="setStyle('fill')">
+			<span>填充</span>
+			<input type="color" ng-model="csState.fillStyle" >
+		</div>
+		<hr>
+		<span class="apan">线宽：</span><input type="range" min="1" max="80" type="1" ng-model="csState.lineWidth">
+		<span class="apan">画板宽：</span><input type="range" min="400" max="800" type="1" ng-model="canvasWH.width">
+		<span class="apan">画板高：</span><input type="range" min="400" max="800" type="1" ng-model="canvasWH.height">
+		<button type="button"  ng-click="newSketch()" class="button black">NEWS</button>
+		<button type="button" class="button black round"><a  ng-click="save($event)" >DOWNLOAD</a></button>
+		<button type="button" class="button black larrow">GO BACK</button>
+		<button type="button" class="button black tags">SIGN UP</button>
+	</div>
+	<div class="right">
+		<canvas height="{{canvasWH.height}}" width="{{canvasWH.width}}"></canvas>
+	</div>
+</body>
+</html>
