@@ -23,28 +23,28 @@ sketch.controller('sketchController', ['$scope', function($scope){
 		ctx.clearRect(0,0,$scope.canvasWH.width,$scope.canvasWH.height);
 	}
 	var setmousemove = {
-		line:function(e){//画直线
+		line:function(evs){//画直线
 			canvas.onmousemove = function(ev){
 				clearCanvas();
 				if(current){
 					ctx.putImageData(current,0,0);
 				}
 				ctx.beginPath();
-				ctx.moveTo(e.offsetX,e.offsetY);
+				ctx.moveTo(evs.offsetX,evs.offsetY);
 				ctx.lineTo(ev.offsetX,ev.offsetY);
 				ctx.stroke();
 			}
 		},
-		arc:function(e){//画圆
+		arc:function(evs){//画圆
 			canvas.onmousemove = function(ev){
 				clearCanvas();
 				if(current){
 					ctx.putImageData(current,0,0);
 				}
 				ctx.beginPath();
-				ctx.moveTo(ev.offsetX,e.offsetY);
-				var r = Math.abs(ev.offsetX-e.offsetX);
-				ctx.arc(e.offsetX,e.offsetY,r,0,Math.PI*2);
+				ctx.moveTo(ev.offsetX,evs.offsetY);
+				var r = Math.abs(ev.offsetX-evs.offsetX);
+				ctx.arc(evs.offsetX,evs.offsetY,r,0,Math.PI*2);
 				if($scope.csState.style == "fill"){
 					ctx.fill();
 				}else{
@@ -52,9 +52,9 @@ sketch.controller('sketchController', ['$scope', function($scope){
 				}
 			}
 		},
-		suiyi:function(e){//画随意线
+		suiyi:function(evs){//画随意线
 			ctx.beginPath();
-			ctx.moveTo(e.offsetX,e.offsetY);
+			ctx.moveTo(evs.offsetX,evs.offsetY);
 			canvas.onmousemove = function(ev){
 				clearCanvas();
 				if(current){
@@ -65,38 +65,39 @@ sketch.controller('sketchController', ['$scope', function($scope){
 				ctx.stroke();
 			}
 		},
-		rect:function(e){//画矩形
+		rect:function(evs){//画矩形
 			canvas.onmousemove = function(ev){
 				clearCanvas();
 				if(current){
 					ctx.putImageData(current,0,0);
 				}
 				ctx.beginPath();
-				ctx.moveTo(e.offsetX,e.offsetY);
-				var x = ev.offsetX - e.offsetX - 0.5;
-				var y = ev.offsetY - e.offsetY - 0.5;
+				ctx.moveTo(evs.offsetX,evs.offsetY);
+				var x = ev.offsetX - evs.offsetX - 0.5;
+				var y = ev.offsetY - evs.offsetY - 0.5;
 				if($scope.csState.style == "fill"){
-					ctx.fillRect(e.offsetX,e.offsetY,x,y);
+					ctx.fillRect(evs.offsetX,evs.offsetY,x,y);
 				}else{
-					ctx.strokeRect(e.offsetX,e.offsetY,x,y);
+					ctx.strokeRect(evs.offsetX,evs.offsetY,x,y);
 				}
 				
 			}
 		},
-		clear:function(e){//橡皮擦
+		clear:function(evs){//橡皮擦
 			canvas.onmousemove = function(ev){
-				var x = ev.offsetX - e.offsetX;
-				var y = ev.offsetY - e.offsetY;
-				ctx.clearRect(e.offsetX,e.offsetY,x,y);
+				var x = ev.offsetX - evs.offsetX;
+				var y = ev.offsetY - evs.offsetY;
+				ctx.clearRect(evs.offsetX,evs.offsetY,x,y);
 			}
 		}
 	}
 	//画矩形
 	canvas.onmousedown = function(e){
+		var evs = e||window.event;
 		ctx.strokeStyle = $scope.csState.strokeStyle;
 		ctx.fillStyle = $scope.csState.fillStyle;
 		ctx.lineWidth = $scope.csState.lineWidth;
-		setmousemove[$scope.tool](e);
+		setmousemove[$scope.tool](evs);
 		document.onmouseup = function(){
 			canvas.onmousemove = null;
 			canvas.onmouseup = null;
